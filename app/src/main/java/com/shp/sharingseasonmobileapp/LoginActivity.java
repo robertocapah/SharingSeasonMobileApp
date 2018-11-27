@@ -40,6 +40,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DatabaseManager.init(getApplicationContext());
+        try {
+            new mConfigRepo(getApplicationContext()).InsertDefaultmConfig();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
         etUsername = (TextInputEditText) findViewById(R.id.etUsername);

@@ -20,7 +20,7 @@ public class clsHelper {
         try {
             File dbFile = new File(CURRENT_DATABASE_PATH);
             FileInputStream fis = new FileInputStream(dbFile);
-            String txtPathUserData= Environment.getExternalStorageDirectory()+File.separator+"backupDbKalbeCallPlanAEDP";
+            String txtPathUserData= Environment.getExternalStorageDirectory()+File.separator+"DbSHP";
             File yourFile = new File(txtPathUserData);
             yourFile.createNewFile();
             OutputStream output = new FileOutputStream(yourFile);

@@ -80,7 +80,7 @@ public class mConfigRepo {
         data7.setIntId(7);
         data7.setTxtName("application_name");
         data7.setTxtValue("SHP Sharing Season");
-        data7.setTxtDefaultValue("AEDP Mobile Apps");
+        data7.setTxtDefaultValue("SHP Sharing Season");
         data7.setIntEditAdmin("1");
         helper.getmConfigDao().createOrUpdate(data7);
 
