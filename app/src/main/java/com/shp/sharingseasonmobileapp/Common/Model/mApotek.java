@@ -11,15 +11,15 @@ import java.io.Serializable;
 @DatabaseTable
 public class mApotek implements Serializable {
     @DatabaseField(id = true)
-    private int intApotekId;
+    private String intApotekId;
     @DatabaseField
     private String txtApotekName;
 
-    public int getIntApotekId() {
+    public String getIntApotekId() {
         return intApotekId;
     }
 
-    public void setIntApotekId(int intApotekId) {
+    public void setIntApotekId(String intApotekId) {
         this.intApotekId = intApotekId;
     }
 

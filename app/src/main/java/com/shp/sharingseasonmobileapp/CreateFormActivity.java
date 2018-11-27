@@ -9,12 +9,21 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.shp.sharingseasonmobileapp.Adapter.AdapterListView;
 import com.shp.sharingseasonmobileapp.Adapter.AdapterListViewApotek;
 import com.shp.sharingseasonmobileapp.Common.Model.clsProfile;
+import com.shp.sharingseasonmobileapp.Common.Model.mApotek;
+import com.shp.sharingseasonmobileapp.Common.Repo.mApotekRepo;
+import com.shp.sharingseasonmobileapp.Response.dataApotek.DataApotek;
 import com.shp.sharingseasonmobileapp.Volley.VolleyResponseListener;
 import com.shp.sharingseasonmobileapp.Volley.VolleyUtill;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +31,15 @@ public class CreateFormActivity extends AppCompatActivity {
     ListView listView;
     private static List<clsProfile> itemAdapterList = new ArrayList<>();
     AdapterListViewApotek adapter;
+    private Gson gson;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download_data);
         listView = (ListView)findViewById(R.id.lv_infoprogram);
-
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gson = gsonBuilder.create();
         itemAdapterList.clear();
 
         clsProfile itemAdapter = new clsProfile();
@@ -58,7 +70,34 @@ public class CreateFormActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response, Boolean status, String strErrorMsg) {
                 if (response != null) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        DataApotek model = gson.fromJson(jsonObject.toString(), DataApotek.class);
+                        boolean txtStatus = model.getResult().isStatus();
+                        String txtMessage = model.getResult().getMessage();
+                        String txtMethode_name = model.getResult().getMethodName();
 
+                        if (txtStatus==true){
+                            if (model.getData().getRecords()!=null){
+                                if(model.getData().getRecords().size()>0){
+                                    for (int i = 0; i < model.getData().getRecords().size(); i++){
+                                        mApotek data = new mApotek();
+                                        data.setIntApotekId(model.getData().getRecords().get(i).getCode());
+                                        data.setTxtApotekName(model.getData().getRecords().get(i).getName());
+                                        new mApotekRepo(getApplicationContext()).createOrUpdate(data);
+                                    }
+                                }
+
+//                                List<mApotek>
+                            }
+                        }else {
+                            Toast.makeText(getApplicationContext(), txtMessage, Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

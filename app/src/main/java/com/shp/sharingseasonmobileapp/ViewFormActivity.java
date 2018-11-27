@@ -53,7 +53,7 @@ public class ViewFormActivity extends AppCompatActivity {
         itemAdapterList.add(itemAdapter);
         adapter = new AdapterListView(getApplicationContext(), itemAdapterList);
         listView.setAdapter(adapter);
-        listView.setDivider(null);
+        listView.setDivider(null); 
         listView.setEmptyView((LinearLayout)findViewById(R.id.ln_emptyMain));
 
         adapter.setmOnImageDeleteClickListener(new AdapterListView.onImageDeleteClickListener() {
