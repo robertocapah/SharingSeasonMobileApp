@@ -20,7 +20,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.shp.sharingseasonmobileapp.Common.Model.mConfigData;
+import com.shp.sharingseasonmobileapp.Common.Model.mConfig;
 import com.shp.sharingseasonmobileapp.Common.Repo.mConfigRepo;
 
 import org.apache.http.HttpStatus;
@@ -52,7 +52,7 @@ public class VolleyUtill {
 
         final mConfigRepo configRepo = new mConfigRepo(context);
         try {
-            mConfigData configDataClient = (mConfigData) configRepo.findById(4);
+            mConfig configDataClient = (mConfig) configRepo.findById(4);
 //            clientId = configDataClient.getTxtDefaultValue().toString();
 //            dataToken = getDataToken(context);
         } catch (SQLException e) {
@@ -215,11 +215,11 @@ public class VolleyUtill {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 mConfigRepo configRepo = new mConfigRepo(context);
-                mConfigData UserName = null;
-                mConfigData Passoword = null;
+                mConfig UserName = null;
+                mConfig Passoword = null;
                 try {
-                    UserName = (mConfigData) configRepo.findById(9);
-                    Passoword = (mConfigData) configRepo.findById(10);
+                    UserName = (mConfig) configRepo.findById(9);
+                    Passoword = (mConfig) configRepo.findById(10);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
