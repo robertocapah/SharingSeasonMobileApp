@@ -11,6 +11,7 @@ import com.j256.ormlite.table.TableUtils;
 import com.shp.sharingseasonmobileapp.Common.Model.mApotek;
 import com.shp.sharingseasonmobileapp.Common.Model.mConfig;
 import com.shp.sharingseasonmobileapp.Common.Model.mUserLogin;
+import com.shp.sharingseasonmobileapp.Common.Model.tResep;
 
 import java.sql.SQLException;
 
@@ -27,6 +28,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     protected Dao<mConfig, Integer> mConfigDao;
     protected Dao<mUserLogin, Integer> mUserLoginsDao;
     protected Dao<mApotek, Integer> mApotekDao;
+    protected Dao<tResep, Integer> tResepsDao;
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -36,6 +38,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             TableUtils.createTableIfNotExists(connectionSource, mConfig.class);
             TableUtils.createTableIfNotExists(connectionSource, mApotek.class);
+            TableUtils.createTableIfNotExists(connectionSource, tResep.class);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -52,6 +55,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 //            }
             Log.i(DatabaseHelper.class.getName(), "onUpgrade");
             TableUtils.dropTable(connectionSource, mConfig.class, true);
+            TableUtils.dropTable(connectionSource, mApotek.class, true);
+            TableUtils.dropTable(connectionSource, tResep.class, true);
 
             onCreate(database, connectionSource);
         } catch (SQLException e) {
@@ -77,10 +82,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mApotekDao;
     }
+    public Dao<tResep, Integer> getTResepDao() throws SQLException {
+        if (tResepsDao == null) {
+            tResepsDao = getDao(tResep.class);
+        }
+        return tResepsDao;
+    }
     @Override
     public void close() {
         mConfigDao = null;
         mUserLoginsDao = null;
         mApotekDao = null;
+        tResepsDao = null;
     }
 }
