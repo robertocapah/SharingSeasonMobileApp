@@ -47,21 +47,47 @@ public class tResepRepo implements crud {
 
     @Override
     public int update(Object item) throws SQLException {
-        return 0;
+        int index = -1;
+        tResep object = (tResep) item;
+        try {
+            index = helper.getTResepDao().update(object);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return index;
     }
 
     @Override
     public int delete(Object item) throws SQLException {
-        return 0;
+        int index = -1;
+        tResep object = (tResep) item;
+        try {
+            index = helper.getTResepDao().delete(object);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return index;
     }
 
     @Override
     public Object findById(int id) throws SQLException {
-        return null;
+        tResep item = null;
+        try{
+            item = helper.getTResepDao().queryForId(id);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return item;
     }
 
     @Override
-    public List<?> findAll() throws SQLException {
-        return null;
+    public List<tResep> findAll() throws SQLException {
+        List<tResep> items = null;
+        try{
+            items = helper.getTResepDao().queryForAll();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return items;
     }
 }

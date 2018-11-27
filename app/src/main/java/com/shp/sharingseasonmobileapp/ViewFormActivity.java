@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.shp.sharingseasonmobileapp.Adapter.AdapterListView;
 import com.shp.sharingseasonmobileapp.Common.Model.clsProfile;
+import com.shp.sharingseasonmobileapp.Common.Model.tResep;
+import com.shp.sharingseasonmobileapp.Common.Repo.tResepRepo;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -33,6 +35,8 @@ public class ViewFormActivity extends AppCompatActivity {
     Dialog dialogCustom;
     String txtNoDoc;
     FloatingActionButton fab;
+    tResep dataResep;
+    boolean isEdit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +47,24 @@ public class ViewFormActivity extends AppCompatActivity {
 
         itemAdapterList.clear();
 
-        clsProfile itemAdapter = new clsProfile();
-        itemAdapter.setTxtId("1");
-        itemAdapter.setTxtSubTittle("hahaha");
-        itemAdapter.setTxtTittle("hhah"); //nama dokter substring(0,1)
-        itemAdapter.setIntColor(R.color.purple_600);
-        itemAdapter.setTxtImgName("s");;
 
-        itemAdapterList.add(itemAdapter);
+        List<tResep> reseps = new ArrayList<>();
+        try {
+            reseps = new tResepRepo(getApplicationContext()).findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        for (tResep r :
+                reseps) {
+            clsProfile itemAdapter = new clsProfile();
+            itemAdapter.setTxtId(String.valueOf(r.getIntResepId()));
+            itemAdapter.setTxtSubTittle(r.getTxtResep());
+//                                    itemAdapter.setTxtTittle("hhah"); //nama dokter substring(0,1)
+            itemAdapter.setIntColor(R.color.purple_600);
+            itemAdapter.setTxtImgName((r.getTxtResep().substring(0,1)).toUpperCase());;
+
+            itemAdapterList.add(itemAdapter);
+        }
         adapter = new AdapterListView(getApplicationContext(), itemAdapterList);
         listView.setAdapter(adapter);
         listView.setDivider(null);
@@ -61,6 +75,20 @@ public class ViewFormActivity extends AppCompatActivity {
             public void onItemClick(View view, clsProfile obj, int position) {
                 //delete
                 Toast.makeText(getApplicationContext(), "delete", Toast.LENGTH_SHORT).show();
+                int id = Integer.parseInt(obj.getTxtId());
+                try {
+                    tResep rs = (tResep) new tResepRepo(getApplicationContext()).findById(id);
+                    if(rs!=null){
+                        new tResepRepo(getApplicationContext()).delete(rs);
+                        itemAdapterList.remove(obj);
+                        adapter.notifyDataSetChanged();
+                        listView.setAdapter(adapter);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+
             }
         });
 
@@ -69,11 +97,41 @@ public class ViewFormActivity extends AppCompatActivity {
             public void onItemClick(View view, clsProfile obj, int position) {
                 //edit
                 Toast.makeText(getApplicationContext(), "edit", Toast.LENGTH_SHORT).show();
+                int id = Integer.parseInt(obj.getTxtId());
+                try {
+                    isEdit = true;
+                    dataResep = (tResep) new tResepRepo(getApplicationContext()).findById(id);
+                    showCustomDialog();
+//                    if(rs!=null){
+//                        rs.setTxtResep(obj.getTxtSubTittle());
+//                        new tResepRepo(getApplicationContext()).createOrUpdate(rs);
+//                        List<tResep> reseps = new tResepRepo(getApplicationContext()).findAll();
+//                        if (itemAdapterList!=null){
+//                            itemAdapterList.clear();
+//                            for (tResep r :
+//                                    reseps) {
+//                                clsProfile itemAdapter = new clsProfile();
+//                                itemAdapter.setTxtId(String.valueOf(r.getIntResepId()));
+//                                itemAdapter.setTxtSubTittle(r.getTxtResep());
+////                                    itemAdapter.setTxtTittle("hhah"); //nama dokter substring(0,1)
+//                                itemAdapter.setIntColor(R.color.purple_600);
+//                                itemAdapter.setTxtImgName((r.getTxtResep().substring(0,1)).toUpperCase());;
+//
+//                                itemAdapterList.add(itemAdapter);
+//                                adapter.notifyDataSetChanged();
+//                                listView.setAdapter(adapter);
+//                            }
+//                        }
+//                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         });
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isEdit = false;
                 showCustomDialog();
             }
         });
@@ -96,6 +154,11 @@ public class ViewFormActivity extends AppCompatActivity {
         tv_title.setText("Create Order");
         tv_subtitle.setText("Please fill number document");
         final EditText et_userName = (EditText) dialogCustom.findViewById(R.id.et_int_number_realisasi);
+        if (isEdit){
+            et_userName.setText(dataResep.getTxtResep());
+        }else {
+            et_userName.setText("");
+        }
         et_userName.setHint("AA.2018.07");
 //        et_userName.setInputType(InputType.TYPE_CLASS_TEXT);
         char[] chars = {'.'};
@@ -115,7 +178,8 @@ public class ViewFormActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please fill number document...", Toast.LENGTH_SHORT).show();
 //                    ToastCustom.showToasty(getApplicationContext(),"Please fill number document...",4);
                 } else {
-                    saveData();
+                    saveData(txtNoDoc);
+                    dialogCustom.dismiss();
                 }
             }
         });
@@ -124,7 +188,7 @@ public class ViewFormActivity extends AppCompatActivity {
         dialogCustom.getWindow().setAttributes(lp);
     }
 
-    public void saveData(){
+    public void saveData(final String txtRes){
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ViewFormActivity.this);
 
         builder.setTitle("Create Order");
@@ -133,53 +197,38 @@ public class ViewFormActivity extends AppCompatActivity {
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
-//                tMaintenanceHeader dtHeader = null;
-//                try {
-//                    mUserLogin dtLogin = new clsMainBL().getUserLogin(getContext());
-////                    if (dataPlan.getIntActivityId()==1){
-////                        dtHeader = (tMaintenanceHeader) new tMaintenanceHeaderRepo(getContext()).findByOutletId(dtCheckinActive.getTxtDokterId(),dataPlan.getIntActivityId());
-////                    }else if (dataPlan.getIntActivityId()==2){
-////                        dtHeader = (tMaintenanceHeader) new tMaintenanceHeaderRepo(getContext()).findByOutletId(dtCheckinActive.getTxtApotekId(), dataPlan.getIntActivityId());
-////                    }
-//
-//                    dtHeader = (tMaintenanceHeader) new tMaintenanceHeaderRepo(getContext()).findByRealisasiId(dtCheckinActive.getTxtRealisasiVisitId());
-//                    if (dtHeader==null){
-//                        tMaintenanceHeader dt = new tMaintenanceHeader();
-//                        dt.setTxtHeaderId(new clsActivity().GenerateGuid());
-//                        dt.setTxtRealisasiVisitId(dtCheckinActive.getTxtRealisasiVisitId());
-//                        dt.setIntActivityId(dataPlan.getIntActivityId());
-//                        dt.setIntUserId(dtLogin.getIntUserID());
-//                        dt.setIntRoleId(dtLogin.getIntRoleID());
-//                        dt.setIntAreaId(dataPlan.getTxtAreaId());
-//                        if (dataPlan.getIntActivityId()==1){
-//                            dt.setIntDokterId(dtCheckinActive.getTxtDokterId());
-//                        }else if (dataPlan.getIntActivityId()==2){
-//                            dt.setIntApotekID(dtCheckinActive.getTxtApotekId());
-//                        }
-//                        dt.setIntFlagPush(new clsHardCode().Save);
-//                        headerRepo.createOrUpdate(dt);
-//                        dtHeader = dt;
-//                    } else {
-//                        tMaintenanceHeader dt = dtHeader;
-//                        dt.setIntFlagPush(new clsHardCode().Save);
-//                        headerRepo.createOrUpdate(dt);
-//                    }
-//                    tMaintenanceDetail detail = new tMaintenanceDetail();
-//                    detail.setTxtDetailId(new clsActivity().GenerateGuid());
-//                    detail.setTxtHeaderId(dtHeader.getTxtHeaderId());
-//                    detail.setIntSubDetailActivityId(IntSubSubActivityid);
-//                    detail.setTxtNoDoc(txtNoDoc);
-//                    detail.setIntFlagPush(new clsHardCode().Save);
-//                    detailRepo.createOrUpdate(detail);
-//
-//                    ToastCustom.showToasty(getContext(), "Saved", 1);
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                }
-//                dialogCustom.dismiss();
-//                Bundle bundle = new Bundle();
-//                bundle.putString(SUB_SUB_ACTIVITY, txtSubSubActivity);
-//                new Tools().intentFragmentSetArgument(FragementMaintenance.class, "Maintenance", getContext(), bundle);
+                tResep data = new tResep();
+                if (isEdit){
+                    data = dataResep;
+                    data.setTxtResep(txtRes
+                    );
+                }else {
+                    data.setTxtResep(txtRes);
+                }
+
+                try {
+                    new tResepRepo(getApplicationContext()).createOrUpdate(data);
+                    List<tResep> reseps = new tResepRepo(getApplicationContext()).findAll();
+                    if (itemAdapterList!=null){
+                        itemAdapterList.clear();
+                        for (tResep r :
+                                reseps) {
+                            clsProfile itemAdapter = new clsProfile();
+                            itemAdapter.setTxtId(String.valueOf(r.getIntResepId()));
+                            itemAdapter.setTxtSubTittle(r.getTxtResep());
+//                                    itemAdapter.setTxtTittle("hhah"); //nama dokter substring(0,1)
+                            itemAdapter.setIntColor(R.color.purple_600);
+                            itemAdapter.setTxtImgName((r.getTxtResep().substring(0,1)).toUpperCase());;
+
+                            itemAdapterList.add(itemAdapter);
+                            adapter.notifyDataSetChanged();
+                            listView.setAdapter(adapter);
+                        }
+                    }
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
