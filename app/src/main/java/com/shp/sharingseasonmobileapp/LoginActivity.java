@@ -69,7 +69,8 @@ public class LoginActivity extends AppCompatActivity {
         ((View) findViewById(R.id.sign_up)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(parent_view, "Sign Up", Snackbar.LENGTH_SHORT).show();
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
     }

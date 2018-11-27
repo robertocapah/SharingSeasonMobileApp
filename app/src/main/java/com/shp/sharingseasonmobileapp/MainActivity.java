@@ -32,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
         ln_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, ViewFormActivity.class);
+                startActivity(intent);
             }
         });
         ln_copyDb.setOnClickListener(new View.OnClickListener() {
