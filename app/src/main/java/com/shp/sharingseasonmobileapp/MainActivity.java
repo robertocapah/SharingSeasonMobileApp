@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         ln_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CreateFormActivity.class);
+                Intent intent = new Intent(MainActivity.this, ViewFormActivity.class);
                 startActivity(intent);
             }
         });
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         ln_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ViewFormActivity.class);
+                Intent intent = new Intent(MainActivity.this, CreateFormActivity.class);
                 startActivity(intent);
             }
         });
