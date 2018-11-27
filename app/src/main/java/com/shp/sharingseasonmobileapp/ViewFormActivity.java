@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +54,7 @@ public class ViewFormActivity extends AppCompatActivity {
         adapter = new AdapterListView(getApplicationContext(), itemAdapterList);
         listView.setAdapter(adapter);
         listView.setDivider(null);
+        listView.setEmptyView((LinearLayout)findViewById(R.id.ln_emptyMain));
 
         adapter.setmOnImageDeleteClickListener(new AdapterListView.onImageDeleteClickListener() {
             @Override
