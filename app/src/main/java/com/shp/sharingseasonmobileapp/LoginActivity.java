@@ -3,6 +3,7 @@ package com.shp.sharingseasonmobileapp;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -34,6 +35,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Snackbar.make(parent_view, "Forgot Password", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+        ((View) findViewById(R.id.btn_login)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
         ((View) findViewById(R.id.sign_up)).setOnClickListener(new View.OnClickListener() {
