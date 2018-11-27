@@ -111,12 +111,6 @@ public class mUserLoginRepo implements crud {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        for (mUserLogin dt : data){
-            if (dateFormat.format(cal.getTime()).compareTo(dateFormat.format(sdf.parse(dt.getDtLogIn())))==0){
-                valid = true;
-                break;
-            }
-        }
         return valid;
     }
 

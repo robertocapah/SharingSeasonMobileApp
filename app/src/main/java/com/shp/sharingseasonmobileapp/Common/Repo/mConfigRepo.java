@@ -3,7 +3,7 @@ package com.shp.sharingseasonmobileapp.Common.Repo;
 import android.content.Context;
 
 
-import com.shp.sharingseasonmobileapp.Common.Model.mConfigData;
+import com.shp.sharingseasonmobileapp.Common.Model.mConfig;
 import com.shp.sharingseasonmobileapp.Database.DatabaseHelper;
 import com.shp.sharingseasonmobileapp.Database.DatabaseManager;
 
@@ -24,7 +24,7 @@ public class mConfigRepo {
     }
 
     public Object findById(int value) throws SQLException {
-        mConfigData item = null;
+        mConfig item = null;
         try{
             item = helper.getmConfigDao().queryForId(value);
         }catch (SQLException e){
@@ -34,7 +34,7 @@ public class mConfigRepo {
     }
 
     public List<?> findAll() throws SQLException {
-        List<mConfigData> items = null;
+        List<mConfig> items = null;
         try{
             items = helper.getmConfigDao().queryForAll();
         }catch (SQLException e){
@@ -44,7 +44,7 @@ public class mConfigRepo {
     }
 
     public void InsertDefaultmConfig() throws SQLException {
-        mConfigData data = new mConfigData();
+        mConfig data = new mConfig();
         data.setIntId(1);
         data.setTxtName("android:versionCode");
         data.setTxtValue("5");
@@ -52,7 +52,7 @@ public class mConfigRepo {
         data.setIntEditAdmin("1");
         helper.getmConfigDao().createOrUpdate(data);
 
-        data = new mConfigData();
+        data = new mConfig();
         data.setIntId(2);
         data.setTxtName("API_menu");
         data.setTxtValue(API_menu);
@@ -60,7 +60,7 @@ public class mConfigRepo {
         data.setIntEditAdmin("1");
         helper.getmConfigDao().createOrUpdate(data);
 
-        data = new mConfigData();
+        data = new mConfig();
         data.setIntId(3);
         data.setTxtName("Domain Kalbe");
         data.setTxtValue("ONEKALBE.LOCAL");
@@ -68,7 +68,7 @@ public class mConfigRepo {
         data.setIntEditAdmin("1");
         helper.getmConfigDao().createOrUpdate(data);
 
-        mConfigData data6 = new mConfigData();
+        mConfig data6 = new mConfig();
         data6.setIntId(6);
         data6.setTxtName("Text Footer");
         data6.setTxtValue("Copyright &copy; KN IT 2018");
@@ -76,7 +76,7 @@ public class mConfigRepo {
         data6.setIntEditAdmin("1");
         helper.getmConfigDao().createOrUpdate(data6);
 
-        mConfigData data7 = new mConfigData();
+        mConfig data7 = new mConfig();
         data7.setIntId(7);
         data7.setTxtName("application_name");
         data7.setTxtValue("SHP Sharing Season");
@@ -84,7 +84,7 @@ public class mConfigRepo {
         data7.setIntEditAdmin("1");
         helper.getmConfigDao().createOrUpdate(data7);
 
-        mConfigData data8 = new mConfigData();
+        mConfig data8 = new mConfig();
         data8.setIntId(8);
         data8.setTxtName("Username");
         data8.setTxtValue("mochalatte-mae-stage");
@@ -92,7 +92,7 @@ public class mConfigRepo {
         data8.setIntEditAdmin("1");
         helper.getmConfigDao().createOrUpdate(data8);
 
-        mConfigData data9 = new mConfigData();
+        mConfig data9 = new mConfig();
         data9.setIntId(9);
         data9.setTxtName("Username");
         data9.setTxtValue("mochalatte-mae-stage");
@@ -100,7 +100,7 @@ public class mConfigRepo {
         data9.setIntEditAdmin("1");
         helper.getmConfigDao().createOrUpdate(data9);
 
-        mConfigData data10 = new mConfigData();
+        mConfig data10 = new mConfig();
         data10.setIntId(10);
         data10.setTxtName("Password");
         data10.setTxtValue("1234567890");

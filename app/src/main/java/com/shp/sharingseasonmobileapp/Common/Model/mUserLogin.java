@@ -24,24 +24,6 @@ public class mUserLogin implements Serializable {
     private String TxtEmpID;
     @DatabaseField(columnName = "TxtEmail")
     private String TxtEmail;
-    @DatabaseField(columnName = "intRoleID")
-    private int intRoleID;
-    @DatabaseField(columnName = "txtRoleName")
-    private String txtRoleName;
-    @DatabaseField(columnName = "IntDepartmentID")
-    private int IntDepartmentID;
-    @DatabaseField(columnName = "IntLOBID")
-    private int IntLOBID;
-    @DatabaseField(columnName = "TxtCompanyCode")
-    private String TxtCompanyCode;
-    @DatabaseField
-    private String dtLogOut;
-    @DatabaseField
-    private String dtLogIn;
-    @DatabaseField(dataType = DataType.BYTE_ARRAY)
-    private byte[] BlobImg;
-    @DatabaseField
-    private String txtFileName;
 
 
     public int getIntUserID() {
@@ -84,83 +66,5 @@ public class mUserLogin implements Serializable {
         TxtEmail = txtEmail;
     }
 
-    public int getIntDepartmentID() {
-        return IntDepartmentID;
-    }
 
-    public void setIntDepartmentID(int intDepartmentID) {
-        IntDepartmentID = intDepartmentID;
-    }
-
-    public int getIntLOBID() {
-        return IntLOBID;
-    }
-
-    public void setIntLOBID(int intLOBID) {
-        IntLOBID = intLOBID;
-    }
-
-    public String getTxtCompanyCode() {
-        return TxtCompanyCode;
-    }
-
-    public void setTxtCompanyCode(String txtCompanyCode) {
-        TxtCompanyCode = txtCompanyCode;
-    }
-
-    public int getIntRoleID() {
-        return intRoleID;
-    }
-
-    public void setIntRoleID(int intRoleID) {
-        this.intRoleID = intRoleID;
-    }
-
-    public String getTxtRoleName() {
-        return txtRoleName;
-    }
-
-    public void setTxtRoleName(String txtRoleName) {
-        this.txtRoleName = txtRoleName;
-    }
-
-    public String getDtLogOut() {
-        return dtLogOut;
-    }
-
-    public void setDtLogOut(String dtLogOut) {
-        this.dtLogOut = dtLogOut;
-    }
-
-    public String getDtLogIn() {
-        return dtLogIn;
-    }
-
-    public void setDtLogIn(String dtLogIn) {
-        this.dtLogIn = dtLogIn;
-    }
-
-    public String getTxtGuID() {
-        return txtGuID;
-    }
-
-    public void setTxtGuID(String txtGuID) {
-        this.txtGuID = txtGuID;
-    }
-
-    public byte[] getBlobImg() {
-        return BlobImg;
-    }
-
-    public void setBlobImg(byte[] blobImg) {
-        BlobImg = blobImg;
-    }
-
-    public String getTxtFileName() {
-        return txtFileName;
-    }
-
-    public void setTxtFileName(String txtFileName) {
-        this.txtFileName = txtFileName;
-    }
 }
