@@ -9,6 +9,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.shp.sharingseasonmobileapp.Common.Model.mConfigData;
+import com.shp.sharingseasonmobileapp.Common.Model.mUserLogin;
 
 import java.sql.SQLException;
 
@@ -23,6 +24,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     // the DAO object we use to access the mConfigData table
     protected Dao<mConfigData, Integer> mConfigDao;
+    protected Dao<mUserLogin, Integer> mUserLoginsDao;
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -60,9 +62,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mConfigDao;
     }
-
+    public Dao<mUserLogin, Integer> getmUserLoginsDao() throws SQLException {
+        if (mUserLoginsDao == null) {
+            mUserLoginsDao = getDao(mUserLogin.class);
+        }
+        return mUserLoginsDao;
+    }
     @Override
     public void close() {
         mConfigDao = null;
+        mUserLoginsDao = null;
     }
 }
