@@ -7,27 +7,43 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
+import android.widget.Toast;
 
+import com.shp.sharingseasonmobileapp.Common.Model.mConfig;
+import com.shp.sharingseasonmobileapp.Common.Repo.mConfigRepo;
 import com.shp.sharingseasonmobileapp.Database.DatabaseManager;
+import com.shp.sharingseasonmobileapp.Volley.VolleyResponseListener;
+import com.shp.sharingseasonmobileapp.Volley.VolleyUtill;
 import com.shp.sharingseasonmobileapp.utils.Tools;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 public class LoginActivity extends AppCompatActivity {
 
     private View parent_view;
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
-
+    TextInputEditText etUsername, etPassword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DatabaseManager.init(getApplicationContext());
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
+        etUsername = (TextInputEditText) findViewById(R.id.etUsername);
+        etPassword = (TextInputEditText) findViewById(R.id.etPassword);
         parent_view = findViewById(android.R.id.content);
         Tools.setSystemBarColor(this, R.color.blue_grey_900);
 
@@ -40,8 +56,9 @@ public class LoginActivity extends AppCompatActivity {
         ((View) findViewById(R.id.btn_login)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
+                String user= etUsername.getText().toString();
+                String pas = etPassword.getText().toString();
+                login(user,pas);
             }
         });
         ((View) findViewById(R.id.sign_up)).setOnClickListener(new View.OnClickListener() {
@@ -104,5 +121,32 @@ public class LoginActivity extends AppCompatActivity {
                 || hasReadExternalStoragePermission != PackageManager.PERMISSION_GRANTED){
             boolean checkPermission = checkPermission();
         }
+    }
+    public void login(String username,String password){
+        String strLinkAPI = "http://10.171.13.50:8013/api/user_login";
+        JSONObject userData = new JSONObject();
+        JSONObject resJson = new JSONObject();
+        try {
+            userData.put("username",username);
+            userData.put("password",password);
+            resJson.put("data", userData);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        final String mRequestBody = resJson.toString();
+        new VolleyUtill().volleyLogin(LoginActivity.this, strLinkAPI, mRequestBody, "Checking in please wait !", new VolleyResponseListener() {
+            @Override
+            public void onError(String response) {
+                Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG);
+            }
+
+            @Override
+            public void onResponse(String response, Boolean status, String strErrorMsg) {
+                if (response != null) {
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 }
