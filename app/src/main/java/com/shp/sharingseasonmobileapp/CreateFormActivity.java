@@ -42,14 +42,7 @@ public class CreateFormActivity extends AppCompatActivity {
         gson = gsonBuilder.create();
         itemAdapterList.clear();
 
-        clsProfile itemAdapter = new clsProfile();
-        itemAdapter.setTxtId("1");
-        itemAdapter.setTxtSubTittle("hahaha");
-        itemAdapter.setTxtTittle("hhah"); //nama dokter substring(0,1)
-        itemAdapter.setIntColor(R.color.purple_600);
-        itemAdapter.setTxtImgName("s");;
 
-        itemAdapterList.add(itemAdapter);
         adapter = new AdapterListViewApotek(getApplicationContext(), itemAdapterList);
         listView.setAdapter(adapter);
         listView.setDivider(null);
@@ -88,7 +81,19 @@ public class CreateFormActivity extends AppCompatActivity {
                                     }
                                 }
 
-//                                List<mApotek>
+                                List<mApotek> data = (List<mApotek>) new mApotekRepo(getApplicationContext()).findAll();
+                                for (int i = 0; i < data.size(); i++){
+                                    clsProfile itemAdapter = new clsProfile();
+                                    itemAdapter.setTxtId(data.get(i).getIntApotekId());
+                                    itemAdapter.setTxtSubTittle(data.get(i).getTxtApotekName());
+//                                    itemAdapter.setTxtTittle("hhah"); //nama dokter substring(0,1)
+                                    itemAdapter.setIntColor(R.color.purple_600);
+                                    itemAdapter.setTxtImgName((data.get(i).getTxtApotekName().substring(0,1)).toUpperCase());;
+
+                                    itemAdapterList.add(itemAdapter);
+                                    adapter.notifyDataSetChanged();
+                                    listView.setAdapter(adapter);
+                                }
                             }
                         }else {
                             Toast.makeText(getApplicationContext(), txtMessage, Toast.LENGTH_SHORT).show();
