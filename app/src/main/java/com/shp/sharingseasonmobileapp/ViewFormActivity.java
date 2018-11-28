@@ -74,21 +74,42 @@ public class ViewFormActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View view, clsProfile obj, int position) {
                 //delete
-                Toast.makeText(getApplicationContext(), "delete", Toast.LENGTH_SHORT).show();
-                int id = Integer.parseInt(obj.getTxtId());
-                try {
-                    tResep rs = (tResep) new tResepRepo(getApplicationContext()).findById(id);
-                    if(rs!=null){
-                        new tResepRepo(getApplicationContext()).delete(rs);
-                        itemAdapterList.remove(obj);
-                        adapter.notifyDataSetChanged();
-                        listView.setAdapter(adapter);
+                final  clsProfile data = obj;
+
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ViewFormActivity.this);
+
+                builder.setTitle("Delete Order");
+                builder.setMessage("Are you sure?");
+
+                builder.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        int id = Integer.parseInt(data.getTxtId());
+                        try {
+                            tResep rs = (tResep) new tResepRepo(getApplicationContext()).findById(id);
+                            if(rs!=null){
+                                new tResepRepo(getApplicationContext()).delete(rs);
+                                itemAdapterList.remove(data);
+                                adapter.notifyDataSetChanged();
+                                listView.setAdapter(adapter);
+                                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                });
 
+                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
 
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                android.app.AlertDialog alert = builder.create();
+                alert.show();
             }
         });
 
@@ -96,33 +117,11 @@ public class ViewFormActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View view, clsProfile obj, int position) {
                 //edit
-                Toast.makeText(getApplicationContext(), "edit", Toast.LENGTH_SHORT).show();
                 int id = Integer.parseInt(obj.getTxtId());
                 try {
                     isEdit = true;
                     dataResep = (tResep) new tResepRepo(getApplicationContext()).findById(id);
                     showCustomDialog();
-//                    if(rs!=null){
-//                        rs.setTxtResep(obj.getTxtSubTittle());
-//                        new tResepRepo(getApplicationContext()).createOrUpdate(rs);
-//                        List<tResep> reseps = new tResepRepo(getApplicationContext()).findAll();
-//                        if (itemAdapterList!=null){
-//                            itemAdapterList.clear();
-//                            for (tResep r :
-//                                    reseps) {
-//                                clsProfile itemAdapter = new clsProfile();
-//                                itemAdapter.setTxtId(String.valueOf(r.getIntResepId()));
-//                                itemAdapter.setTxtSubTittle(r.getTxtResep());
-////                                    itemAdapter.setTxtTittle("hhah"); //nama dokter substring(0,1)
-//                                itemAdapter.setIntColor(R.color.purple_600);
-//                                itemAdapter.setTxtImgName((r.getTxtResep().substring(0,1)).toUpperCase());;
-//
-//                                itemAdapterList.add(itemAdapter);
-//                                adapter.notifyDataSetChanged();
-//                                listView.setAdapter(adapter);
-//                            }
-//                        }
-//                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -225,6 +224,8 @@ public class ViewFormActivity extends AppCompatActivity {
                             listView.setAdapter(adapter);
                         }
                     }
+
+                    Toast.makeText(getApplicationContext(), "Saved...", Toast.LENGTH_SHORT).show();
 
                 } catch (SQLException e) {
                     e.printStackTrace();
