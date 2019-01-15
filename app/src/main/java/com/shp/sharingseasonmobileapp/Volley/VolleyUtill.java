@@ -242,7 +242,11 @@ public class VolleyUtill {
 //                access_token = dataToken.get(0).getTxtUserToken();
                 HashMap<String, String> headers = new HashMap<>();
 //                headers.put("Authorization", "Bearer " + access_token);
-
+                String credentials = "mochalatte-mae-stage" +":"+"1234567890";
+                String auth = "Basic "
+                        + Base64.encodeToString(credentials.getBytes(),
+                        Base64.NO_WRAP);
+                headers.put("Authorization", auth);
                 return headers;
             }
         };
